@@ -90,14 +90,6 @@ def game_over(x, y):
     screen.blit(game_over, (x, y))
 
 
-# UFO Icon Credit "<a href="https://www.flaticon.com/free-icons/alien" title="alien icons">Alien icons created by Pixel
-# Buddha - Flaticon</a>"
-# Spaceship icon "<a href="https://www.flaticon.com/free-icons/spaceship" title="spaceship icons">Spaceship icons created by Freepik - Flaticon</a>"
-# Game Loop
-# Invader <a href="https://www.flaticon.com/free-icons/alien" title="alien icons">Alien icons created by smalllikeart - Flaticon</a>
-# <a href="https://www.flaticon.com/free-icons/bullet" title="bullet icons">Bullet icons created by Darius Dan - Flaticon</a>
-
-
 running = True
 while running:
     screen.fill(BLACK)
@@ -118,8 +110,6 @@ while running:
                     bullet_sound.play()
                     bulletX = playerX
                     fire_bullet(bulletX, bulletY)
-
-
 
         if event.type == pygame.KEYUP:
             playerX_change = 0
