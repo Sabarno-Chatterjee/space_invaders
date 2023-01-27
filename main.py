@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+from pygame import mixer
 
 # Initialize pygame
 pygame.init()
@@ -9,10 +10,13 @@ pygame.init()
 HEIGHT = 600
 WIDTH = 800
 BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
-# Game variables:
-score = 0
-
+# Score:
+score_value = 0
+font = pygame.font.Font('freesansbold.ttf', 32)
+textX = 10
+textY = 10
 
 # Setting up the screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -43,7 +47,6 @@ for i in range(num_of_enemies):
     enemyX.append(random.randint(0, 736))
     enemyY.append(random.randint(50, 150))
 
-
 # Bullet
 bulletImg = pygame.image.load("bullet.png")
 bulletX = 0
@@ -71,6 +74,11 @@ def fire_bullet(x, y):
 def detect_collision(enemy_x, enemy_y, bullet_x, bullet_y):
     distance = math.sqrt(math.pow(enemy_x - bullet_x, 2) + math.pow(enemy_y - bullet_y, 2))
     return distance
+
+
+def show_score(x, y):
+    score = font.render(f"Score:{score_value}", True, WHITE)
+    screen.blit(score, (x,y))
 
 
 # UFO Icon Credit "<a href="https://www.flaticon.com/free-icons/alien" title="alien icons">Alien icons created by Pixel
@@ -105,7 +113,6 @@ while running:
 
     playerX += playerX_change
 
-
     # Enemy movements:
     for i in range(num_of_enemies):
         enemyX[i] += enemyX_change
@@ -120,7 +127,7 @@ while running:
         if collision_check < 27:
             bulletY = 480
             bullet_state = "ready"
-            score += 1
+            score_value += 1
             enemyX[i] = random.randint(0, 736)
             enemyY[i] = random.randint(50, 150)
         enemy(enemyX[i], enemyY[i], i)
@@ -139,8 +146,5 @@ while running:
         playerX = 736
 
     player(playerX, playerY)
-
-
+    show_score(textX, textY)
     pygame.display.update()
-
-
