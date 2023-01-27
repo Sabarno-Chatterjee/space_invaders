@@ -31,11 +31,18 @@ playerY = 480
 playerX_change = 0
 
 # Enemy
-enemyImg = pygame.image.load("enemy.png")
-enemyX = random.randint(0, 736)
-enemyY = random.randint(50, 150)
+enemyImg = []
+enemyX = []
+enemyY = []
 enemyX_change = 4
 enemyY_change = 40
+num_of_enemies = 6
+
+for i in range(num_of_enemies):
+    enemyImg.append(pygame.image.load("enemy.png"))
+    enemyX.append(random.randint(0, 736))
+    enemyY.append(random.randint(50, 150))
+
 
 # Bullet
 bulletImg = pygame.image.load("bullet.png")
@@ -51,8 +58,8 @@ def player(x, y):
     screen.blit(playerImg, (x, y))
 
 
-def enemy(x, y):
-    screen.blit(enemyImg, (x, y))
+def enemy(x, y, i):
+    screen.blit(enemyImg[i], (x, y))
 
 
 def fire_bullet(x, y):
@@ -97,15 +104,26 @@ while running:
             playerX_change = 0
 
     playerX += playerX_change
-    enemyX += enemyX_change
+
 
     # Enemy movements:
-    if enemyX < 0:
-        enemyX_change = 2
-        enemyY += enemyY_change
-    elif enemyX > 736:
-        enemyX_change = - 2
-        enemyY += enemyY_change
+    for i in range(num_of_enemies):
+        enemyX[i] += enemyX_change
+        if enemyX[i] <= 0:
+            enemyX_change = 2
+            enemyY[i] += enemyY_change
+        elif enemyX[i] > 736:
+            enemyX_change = - 2
+            enemyY[i] += enemyY_change
+        # Collision detection:
+        collision_check = detect_collision(enemyX[i], enemyY[i], bulletX, bulletY)
+        if collision_check < 27:
+            bulletY = 480
+            bullet_state = "ready"
+            score += 1
+            enemyX[i] = random.randint(0, 736)
+            enemyY[i] = random.randint(50, 150)
+        enemy(enemyX[i], enemyY[i], i)
 
     # Bullet movement:
     if bulletY <= 0:
@@ -122,14 +140,7 @@ while running:
 
     player(playerX, playerY)
 
-    enemy(enemyX, enemyY)
+
     pygame.display.update()
 
-    # Collision detection:
-    collision_check = detect_collision(enemyX, enemyY, bulletX, bulletY)
-    if collision_check < 27:
-        bulletY = 480
-        bullet_state = "ready"
-        score += 1
-        enemyX = random.randint(0, 736)
-        enemyY = random.randint(50, 150)
+
