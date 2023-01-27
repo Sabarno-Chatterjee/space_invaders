@@ -22,7 +22,6 @@ textY = 10
 game_over_X = 300
 game_over_Y = 250
 
-
 # Setting up the screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -83,11 +82,13 @@ def detect_collision(enemy_x, enemy_y, bullet_x, bullet_y):
 
 def show_score(x, y):
     score = font.render(f"Score:{score_value}", True, WHITE)
-    screen.blit(score, (x,y))
+    screen.blit(score, (x, y))
+
 
 def game_over(x, y):
     game_over = font.render("GAME OVER!", True, WHITE)
-    screen.blit(game_over, (x,y))
+    screen.blit(game_over, (x, y))
+
 
 # UFO Icon Credit "<a href="https://www.flaticon.com/free-icons/alien" title="alien icons">Alien icons created by Pixel
 # Buddha - Flaticon</a>"
@@ -118,6 +119,8 @@ while running:
                     bulletX = playerX
                     fire_bullet(bulletX, bulletY)
 
+
+
         if event.type == pygame.KEYUP:
             playerX_change = 0
 
@@ -133,9 +136,12 @@ while running:
             enemyX_change = - 2
             enemyY[i] += enemyY_change
 
-        if enemyY[i] > 200:
+        if enemyY[i] > 440:
             # running = False
             game_over(game_over_X, game_over_Y)
+            bullet_state = "empty"
+            restart = font.render("Space to restart", True, WHITE)
+            screen.blit(restart, (285, 400))
             break
 
         # Collision detection:
@@ -166,4 +172,3 @@ while running:
     player(playerX, playerY)
     show_score(textX, textY)
     pygame.display.update()
-
