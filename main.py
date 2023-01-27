@@ -18,6 +18,11 @@ font = pygame.font.Font('freesansbold.ttf', 32)
 textX = 10
 textY = 10
 
+# Game over:
+game_over_X = 300
+game_over_Y = 250
+
+
 # Setting up the screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -80,6 +85,9 @@ def show_score(x, y):
     score = font.render(f"Score:{score_value}", True, WHITE)
     screen.blit(score, (x,y))
 
+def game_over(x, y):
+    game_over = font.render("GAME OVER!", True, WHITE)
+    screen.blit(game_over, (x,y))
 
 # UFO Icon Credit "<a href="https://www.flaticon.com/free-icons/alien" title="alien icons">Alien icons created by Pixel
 # Buddha - Flaticon</a>"
@@ -105,6 +113,8 @@ while running:
                 playerX_change += 7
             if event.key == pygame.K_SPACE:
                 if bullet_state is "ready":
+                    bullet_sound = mixer.Sound("laser.wav")
+                    bullet_sound.play()
                     bulletX = playerX
                     fire_bullet(bulletX, bulletY)
 
@@ -122,9 +132,17 @@ while running:
         elif enemyX[i] > 736:
             enemyX_change = - 2
             enemyY[i] += enemyY_change
+
+        if enemyY[i] > 200:
+            # running = False
+            game_over(game_over_X, game_over_Y)
+            break
+
         # Collision detection:
         collision_check = detect_collision(enemyX[i], enemyY[i], bulletX, bulletY)
         if collision_check < 27:
+            collision_sound = mixer.Sound("explosion.wav")
+            collision_sound.play()
             bulletY = 480
             bullet_state = "ready"
             score_value += 1
@@ -148,3 +166,4 @@ while running:
     player(playerX, playerY)
     show_score(textX, textY)
     pygame.display.update()
+
