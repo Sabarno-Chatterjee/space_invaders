@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 
 # Initialize pygame
 pygame.init()
@@ -8,6 +9,10 @@ pygame.init()
 HEIGHT = 600
 WIDTH = 800
 BLACK = (0, 0, 0)
+
+# Game variables:
+score = 0
+
 
 # Setting up the screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -56,6 +61,11 @@ def fire_bullet(x, y):
     screen.blit(bulletImg, (x + 16, y + 10))
 
 
+def detect_collision(enemy_x, enemy_y, bullet_x, bullet_y):
+    distance = math.sqrt(math.pow(enemy_x - bullet_x, 2) + math.pow(enemy_y - bullet_y, 2))
+    return distance
+
+
 # UFO Icon Credit "<a href="https://www.flaticon.com/free-icons/alien" title="alien icons">Alien icons created by Pixel
 # Buddha - Flaticon</a>"
 # Spaceship icon "<a href="https://www.flaticon.com/free-icons/spaceship" title="spaceship icons">Spaceship icons created by Freepik - Flaticon</a>"
@@ -82,7 +92,6 @@ while running:
                 if bullet_state is "ready":
                     bulletX = playerX
                     fire_bullet(bulletX, bulletY)
-
 
         if event.type == pygame.KEYUP:
             playerX_change = 0
@@ -115,3 +124,12 @@ while running:
 
     enemy(enemyX, enemyY)
     pygame.display.update()
+
+    # Collision detection:
+    collision_check = detect_collision(enemyX, enemyY, bulletX, bulletY)
+    if collision_check < 27:
+        bulletY = 480
+        bullet_state = "ready"
+        score += 1
+        enemyX = random.randint(0, 736)
+        enemyY = random.randint(50, 150)
